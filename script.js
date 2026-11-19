@@ -1,24 +1,55 @@
 /* =========================================================
    THE SANDLER SHOW — logic
+   - Works alone (file:// or any static server).
+   - When served by the Python server (server/app.py):
+       /       -> main screen (display), follows the remote
+       /admin  -> same presentation + remote panel (password)
+     Every interaction goes through act(name, payload): it runs
+     locally and, on an authenticated admin, is sent to the server,
+     which replays it on every display.
    ========================================================= */
 (() => {
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 
+  const IS_ADMIN = /^\/admin\/?$/.test(location.pathname);
+  const SERVED = /^https?:$/.test(location.protocol);
+  if (IS_ADMIN) document.body.classList.add('admin');
+
   const stage = $('#stage');
+  const viewport = $('#viewport');
   const slides = $$('.slide');
   const N = slides.length;
   let cur = 0;
 
-  /* ---------- scale stage to window ---------- */
+  /* ---------- scale stage to its container ---------- */
   function fit() {
-    const s = Math.min(innerWidth / 1600, innerHeight / 900);
+    const w = viewport.clientWidth || innerWidth, h = viewport.clientHeight || innerHeight;
+    const s = Math.min(w / 1600, h / 900);
     stage.style.transform = `translate(-50%, -50%) scale(${s})`;
   }
   addEventListener('resize', fit); fit();
 
+  /* ---------- sync layer ---------- */
+  const ACTIONS = {};
+  let ws = null, role = null;
+  const live = () => ws && ws.readyState === 1;
+  const authed = () => role === 'admin' && live();      // has the password: can control
+  const viewer = () => role === 'display' && live();    // connected without password: watch only
+  function act(a, p = {}) {
+    if (viewer()) { toast('🔒 Solo ver: escribe la clave en "Click to start" o controla desde /admin'); return; }
+    if (ACTIONS[a]) ACTIONS[a](p);
+    if (authed()) ws.send(JSON.stringify({ t: 'act', a, p }));   // screen <-> panel, both ways
+  }
+  let toastT;
+  function toast(msg) {
+    const t = document.getElementById('toast'); if (!t) return;
+    t.textContent = msg; t.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2600);
+  }
+
   /* ---------- sound (WebAudio, no files) ---------- */
-  let muted = false, ac = null;
+  let muted = IS_ADMIN, ac = null;       // the phone/remote stays silent
   function ctx() { if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume(); return ac; }
   function tone(freq, dur, type = 'sine', vol = .18, slideTo = null, delay = 0) {
     if (muted) return;
@@ -82,13 +113,15 @@
     yined: ['Hi! I am Yined! 💖', 'Sandler is the GOAT 🐐', 'Back to school! 🎒', 'It\'s all in the hips! 🏌️‍♀️'],
     majo: ['Hi! I am Majo! ✨', 'High-quality H2O! 💧', 'You can do it! 💪', 'Hoodie + shorts = 😎'],
   };
-  [chY, chM].forEach(c => c.addEventListener('click', () => {
-    const who = c.dataset.who, b = who === 'yined' ? bY : bM;
+  function chibiJump(who, k) {
+    const c = who === 'majo' ? chM : chY, b = who === 'majo' ? bM : bY, list = quips[who === 'majo' ? 'majo' : 'yined'];
     c.classList.remove('jump'); void c.offsetWidth; c.classList.add('jump');
     sfx.boing();
-    b.textContent = quips[who][Math.floor(Math.random() * quips[who].length)];
+    b.textContent = list[((k % list.length) + list.length) % list.length];
     b.classList.add('show'); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove('show'), 2200);
-  }));
+  }
+  [chY, chM].forEach(c => c.addEventListener('click', () =>
+    act('chibi', { who: c.dataset.who, k: Math.floor(Math.random() * 4) })));
 
   /* ---------- grammar stickers ---------- */
   let showGrammar = true;
@@ -97,12 +130,12 @@
   /* ---------- navigation ---------- */
   const ball = $('#ball'), counter = $('#counter');
   function go(i, silent) {
-    i = Math.max(0, Math.min(N - 1, i));
+    i = Math.max(0, Math.min(N - 1, i | 0));
     if (i === cur && !silent) return;
-    const prev = slides[cur];
-    prev.classList.remove('active');
+    slides[cur].classList.remove('active');
     slides[i].classList.add('active');
     cur = i;
+    $('#zoom').classList.remove('on');
     loadGifs(i);
     updateCast(slides[i]);
     counter.textContent = `${i + 1} / ${N}`;
@@ -117,7 +150,8 @@
     if (slides[i].classList.contains('s-quotes')) showQuote(qi, false);
     try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
   }
-  const next = () => go(cur + 1), prev = () => go(cur - 1);
+  const next = () => act('go', { i: Math.min(N - 1, cur + 1) });
+  const prev = () => act('go', { i: Math.max(0, cur - 1) });
 
   /* ---------- timer ---------- */
   let t0 = null, timerOn = false, tick;
@@ -127,8 +161,10 @@
     t0 = Date.now();
     tick = setInterval(() => {
       const s = Math.floor((Date.now() - t0) / 1000);
-      tval.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+      const txt = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+      tval.textContent = txt;
       timerEl.classList.toggle('ok', s >= 360);
+      const rt = $('#r-time'); if (rt) { rt.textContent = '⏱ ' + txt; rt.classList.toggle('ok', s >= 360); }
     }, 500);
   }
   function resetTimer() { clearInterval(tick); t0 = null; tval.textContent = '0:00'; timerEl.classList.remove('ok'); if (cur > 0) startTimer(); }
@@ -153,31 +189,58 @@
     `<b>BOTH:</b> Thank you so much for listening!<br><b>MAJO:</b> Does anyone have any questions? 🙋<br><i>(press C for more confetti)</i>`,
   ];
   const notesEl = $('#notes');
-  function renderNotes() { notesEl.innerHTML = `<h4>SCRIPT · SLIDE ${cur + 1}</h4><p>${NOTES[cur] || ''}</p>`; }
+  const WHO = { yined: '🎤 YINED', majo: '🎤 MAJO', both: '👭 BOTH', none: '👭 BOTH' };
+  function renderNotes() {
+    notesEl.innerHTML = `<h4>SCRIPT · SLIDE ${cur + 1}</h4><p>${NOTES[cur] || ''}</p>`;
+    if (IS_ADMIN) {
+      $('#r-count').textContent = `${cur + 1} / ${N}`;
+      $('#r-who').textContent = WHO[slides[cur].dataset.speaker || 'both'];
+      $('#r-notes').innerHTML = NOTES[cur] || '';
+      $('#r-notes').scrollTop = 0;
+    }
+  }
 
   /* ---------- video modal ---------- */
   const vbox = $('#video'), vframe = $('#vframe'), vyt = $('#vyt');
+  let vPlaying = false;
   function openVideo(id, vertical = false) {
-    vframe.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&cc_load_policy=1&cc_lang_pref=en&hl=en" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    if (!/^[\w-]{6,20}$/.test(id)) return;
+    if (IS_ADMIN && authed()) {
+      // on the remote we only show what is playing on the big screen (no double audio)
+      vframe.innerHTML = `<div class="remote-video"><img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt=""><p>📺 Playing on the main screen</p></div>`;
+    } else {
+      const origin = SERVED ? `&origin=${encodeURIComponent(location.origin)}` : '';
+      vframe.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&cc_load_policy=1&cc_lang_pref=en&hl=en&enablejsapi=1${origin}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    }
+    vPlaying = true;
     vyt.href = vertical ? `https://www.youtube.com/shorts/${id}` : `https://www.youtube.com/watch?v=${id}`;
     vbox.classList.toggle('vertical', vertical);
     vbox.classList.add('on'); sfx.pop();
   }
-  function closeVideo() { vframe.innerHTML = ''; vbox.classList.remove('on'); }
-  $$('[data-video]').forEach(b => b.addEventListener('click', () => openVideo(b.dataset.video, b.dataset.vertical === 'true')));
-  $('#vclose').addEventListener('click', closeVideo);
-  vbox.addEventListener('click', e => { if (e.target === vbox) closeVideo(); });
+  function closeVideo() { vframe.innerHTML = ''; vbox.classList.remove('on'); vPlaying = false; }
+  function videoToggle() {
+    const f = $('iframe', vframe); if (!f) return;
+    vPlaying = !vPlaying;
+    f.contentWindow.postMessage(JSON.stringify({ event: 'command', func: vPlaying ? 'playVideo' : 'pauseVideo', args: [] }), '*');
+  }
+  $$('[data-video]').forEach(b => b.addEventListener('click', () => act('video', { id: b.dataset.video, v: b.dataset.vertical === 'true' })));
+  $('#vclose').addEventListener('click', () => act('vclose'));
+  $('#vtoggle').addEventListener('click', () => act('vtoggle'));
+  vbox.addEventListener('click', e => { if (e.target === vbox) act('vclose'); });
 
-  /* ---------- movies: flip ---------- */
-  $$('.poster, .lesson').forEach(p => p.addEventListener('click', () => { p.classList.toggle('flip'); sfx.pop(); }));
+  /* ---------- posters / lessons: flip ---------- */
+  const flippers = $$('.poster, .lesson');
+  function flipAt(i) { const p = flippers[i]; if (!p) return; p.classList.toggle('flip'); sfx.pop(); }
+  flippers.forEach((p, i) => p.addEventListener('click', () => act('flip', { i })));
 
   /* ---------- Happy Gilmore swing ---------- */
   const course = $('#course');
-  $('#swing').addEventListener('click', () => {
+  function doSwing() {
     course.classList.remove('go'); void course.offsetWidth; course.classList.add('go');
     sfx.swing();
     setTimeout(() => { sfx.ding(); confetti(90, 1150, 520); }, 2100);
-  });
+  }
+  $('#swing').addEventListener('click', () => act('swing'));
 
   /* ---------- quotes machine ---------- */
   const QUOTES = [
@@ -192,7 +255,7 @@
   let qi = 0, typeTimer;
   const qtext = $('#qtext'), qmovie = $('#qmovie'), qgif = $('#qgif'), qcount = $('#qcount');
   function showQuote(i, sound = true) {
-    qi = (i + QUOTES.length) % QUOTES.length;
+    qi = ((i | 0) % QUOTES.length + QUOTES.length) % QUOTES.length;
     const q = QUOTES[qi];
     qgif.src = `assets/gifs/${q.g}.gif`;
     qcount.textContent = `${qi + 1}/${QUOTES.length}`;
@@ -208,9 +271,9 @@
     }, 38);
     if (sound) sfx.pop();
   }
-  $('#qnext').addEventListener('click', () => showQuote(qi + 1));
-  $('#qprev').addEventListener('click', () => showQuote(qi - 1));
-  $('#qsay').addEventListener('click', () => openVideo(QUOTES[qi].v, !!QUOTES[qi].short));
+  $('#qnext').addEventListener('click', () => act('quote', { i: qi + 1 }));
+  $('#qprev').addEventListener('click', () => act('quote', { i: qi - 1 }));
+  $('#qsay').addEventListener('click', () => act('video', { id: QUOTES[qi].v, v: !!QUOTES[qi].short }));
 
   /* ---------- quiz ---------- */
   const QUIZ = [
@@ -219,7 +282,7 @@
     { g: 'bm-penguin', a: 'Billy Madison', o: ['Big Daddy', 'The Wedding Singer', 'Billy Madison'] },
     { g: 'hustle-coach', a: 'Hustle', o: ['Uncut Gems', 'Hustle', 'Click'] },
   ];
-  let qr = 0, score = 0, answered = false;
+  let qr = 0, answered = false, finished = false;
   const opts = $('#opts'), dots = $('#dots'), qnextBtn = $('#quiz-next'), quizQ = $('#quiz-q');
   function renderRound() {
     const r = QUIZ[qr]; answered = false;
@@ -228,13 +291,14 @@
     opts.innerHTML = r.o.map((o, i) => `<button class="opt" data-o="${o}"><span class="k">${'ABC'[i]}</span>${o}</button>`).join('');
     dots.innerHTML = QUIZ.map((_, i) => `<i class="${i < qr ? 'done' : i === qr ? 'cur' : ''}"></i>`).join('');
     qnextBtn.style.display = 'none';
-    $$('.opt', opts).forEach(b => b.addEventListener('click', () => answer(b)));
+    $$('.opt', opts).forEach((b, i) => b.addEventListener('click', () => act('quiz', { i })));
   }
-  function answer(b) {
-    if (answered) return;
+  function answer(i) {
+    const b = $$('.opt', opts)[i];
+    if (!b || answered) return;
     const r = QUIZ[qr];
     if (b.dataset.o === r.a) {
-      answered = true; score++;
+      answered = true;
       b.classList.add('right'); sfx.ding(); confetti(120);
       quizQ.textContent = 'YES! 🎉 Correct!';
       qnextBtn.textContent = qr < QUIZ.length - 1 ? 'NEXT ROUND ▶' : 'FINAL RESULT 🏆';
@@ -244,8 +308,7 @@
       quizQ.textContent = 'Nope! Try again 😅';
     }
   }
-  let finished = false;
-  qnextBtn.addEventListener('click', () => {
+  function quizNext() {
     if (finished) { finished = false; qr = 0; renderRound(); sfx.pop(); return; }
     if (qr < QUIZ.length - 1) { qr++; renderRound(); sfx.pop(); return; }
     finished = true;
@@ -254,24 +317,30 @@
     dots.innerHTML = QUIZ.map(() => '<i class="done"></i>').join('');
     qnextBtn.textContent = 'PLAY AGAIN ↺';
     sfx.tada(); confetti(220);
-  });
+  }
+  qnextBtn.addEventListener('click', () => act('quizNext'));
   renderRound();
 
   /* ---------- style checklist ---------- */
   const checks = $$('#check li');
-  checks.forEach(li => li.addEventListener('click', () => {
+  function toggleCheck(i) {
+    const li = checks[i]; if (!li) return;
     li.classList.toggle('on'); sfx.pop();
     const all = checks.every(c => c.classList.contains('on'));
     $('#sandlerized').classList.toggle('on', all);
     if (all) { sfx.tada(); confetti(150, 400, 700); }
-  }));
+  }
+  checks.forEach((li, i) => li.addEventListener('click', () => act('check', { i })));
 
   /* ---------- meme zoom ---------- */
   const zoom = $('#zoom');
-  $$('.memewall .meme').forEach(m => m.addEventListener('click', () => {
+  const memes = $$('.memewall .meme');
+  function zoomMeme(i) {
+    const m = memes[i]; if (!m) return;
     zoom.innerHTML = ''; zoom.appendChild(m.cloneNode(true)); zoom.classList.add('on'); sfx.boing();
-  }));
-  zoom.addEventListener('click', () => zoom.classList.remove('on'));
+  }
+  memes.forEach((m, i) => m.addEventListener('click', () => act('zoom', { i })));
+  zoom.addEventListener('click', () => act('unzoom'));
 
   /* ---------- confetti ---------- */
   const cv = $('#confetti'), cx = cv.getContext('2d');
@@ -295,27 +364,50 @@
     });
     raf = parts.length ? requestAnimationFrame(loop) : (cx.clearRect(0, 0, 1600, 900), null);
   }
-  $('#party').addEventListener('click', () => { confetti(260); sfx.tada(); });
+  $('#party').addEventListener('click', () => act('party'));
+
+  /* ---------- the action table (what can be mirrored) ---------- */
+  Object.assign(ACTIONS, {
+    go: p => go(p.i),
+    flip: p => flipAt(p.i | 0),
+    swing: () => doSwing(),
+    quote: p => showQuote(p.i),
+    video: p => openVideo(String(p.id || ''), !!p.v),
+    vclose: () => closeVideo(),
+    vtoggle: () => videoToggle(),
+    quiz: p => answer(p.i | 0),
+    quizNext: () => quizNext(),
+    check: p => toggleCheck(p.i | 0),
+    zoom: p => zoomMeme(p.i | 0),
+    unzoom: () => zoom.classList.remove('on'),
+    party: () => { confetti(260); sfx.tada(); },
+    chibi: p => chibiJump(p.who, p.k | 0),
+  });
 
   /* ---------- buttons shouldn't keep focus (so SPACE = next) ---------- */
   document.addEventListener('click', e => { const b = e.target.closest('button'); if (b) b.blur(); });
 
   /* ---------- keyboard ---------- */
   addEventListener('keydown', e => {
+    if (e.target.closest && e.target.closest('input, textarea')) return;
     const k = e.key;
-    if (k === 'Escape') { closeVideo(); zoom.classList.remove('on'); $('#help').classList.remove('on'); notesEl.classList.remove('on'); return; }
+    if (k === 'Escape') {
+      if (vbox.classList.contains('on')) act('vclose');
+      if (zoom.classList.contains('on')) act('unzoom');
+      $('#help').classList.remove('on'); notesEl.classList.remove('on'); return;
+    }
     if (vbox.classList.contains('on')) return;
-    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); zoom.classList.remove('on'); next(); }
-    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); zoom.classList.remove('on'); prev(); }
-    else if (k === 'Home') go(0);
-    else if (k === 'End') go(N - 1);
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); prev(); }
+    else if (k === 'Home') act('go', { i: 0 });
+    else if (k === 'End') act('go', { i: N - 1 });
     else if (/^[nN]$/.test(k)) notesEl.classList.toggle('on');
     else if (/^[tT]$/.test(k)) { timerOn = !timerOn; timerEl.classList.toggle('on', timerOn); document.body.classList.toggle('timer-on', timerOn); }
     else if (/^[rR]$/.test(k)) resetTimer();
     else if (/^[fF]$/.test(k)) toggleFullscreen();
     else if (/^[mM]$/.test(k)) muted = !muted;
     else if (/^[gG]$/.test(k)) { showGrammar = !showGrammar; $$('.grammar').forEach(g => g.style.display = showGrammar ? '' : 'none'); }
-    else if (/^[cC]$/.test(k)) { confetti(220); sfx.tada(); }
+    else if (/^[cC]$/.test(k)) act('party');
     else if (k === 'h' || k === 'H' || k === '?') $('#help').classList.toggle('on');
   });
   $('#help').addEventListener('click', () => $('#help').classList.remove('on'));
@@ -327,7 +419,7 @@
       const req = el.requestFullscreen || el.webkitRequestFullscreen;
       const p = req ? req.call(el) : null;
       // en Android, con pantalla completa se puede fijar horizontal
-      Promise.resolve(p).then(() => screen.orientation?.lock?.('landscape')).catch(() => {});
+      Promise.resolve(p).then(() => { if (!IS_ADMIN) return screen.orientation?.lock?.('landscape'); }).catch(() => {});
     } else {
       (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
     }
@@ -346,9 +438,127 @@
   stage.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
   stage.addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 60) dx < 0 ? next() : prev(); sx = null; });
 
+  /* =========================================================
+     REMOTE: connection to the Python server (only when served)
+     ========================================================= */
+  const store = {
+    get: k => { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+    set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} },
+    del: k => { try { sessionStorage.removeItem(k); } catch (e) {} },
+  };
+  // the classroom screen remembers its password on that computer (localStorage); the panel per tab
+  const keep = {
+    get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
+    del: k => { try { localStorage.removeItem(k); } catch (e) {} },
+  };
+  const PW_KEY = 'sandler-pw', SCREEN_KEY = 'sandler-screen-pw';
+  let pw = IS_ADMIN ? store.get(PW_KEY) : keep.get(SCREEN_KEY);
+  let retries = 0, everConnected = false, denied = false;
+  const dot = $('#r-dot'), badge = $('#remote-badge');
+
+  function setOnline(on) {
+    document.body.classList.toggle('remote-on', on);
+    document.body.classList.toggle('screen-control', on && !IS_ADMIN && role === 'admin');
+    if (dot) dot.classList.toggle('on', on);
+  }
+  function connect() {
+    if (!SERVED || denied) return;
+    if (IS_ADMIN && !pw) { showLogin(''); return; }
+    try { ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws'); }
+    catch (e) { return; }
+    const sock = ws;
+    sock.onopen = () => sock.send(JSON.stringify(pw
+      ? { t: 'hello', role: 'admin', kind: IS_ADMIN ? 'panel' : 'screen', pw }
+      : { t: 'hello', role: 'display', kind: 'screen' }));
+    sock.onmessage = e => {
+      let m; try { m = JSON.parse(e.data); } catch (err) { return; }
+      if (m.t === 'welcome') {
+        role = m.role; everConnected = true; retries = 0; setOnline(true);
+        if (m.state && Number.isInteger(m.state.slide)) go(m.state.slide, true);
+        if (m.state && Number.isInteger(m.state.quote)) qi = m.state.quote;
+        if (IS_ADMIN) { store.set(PW_KEY, pw); hideLogin(); }
+        else {
+          if (role === 'admin') keep.set(SCREEN_KEY, pw);
+          updateGate(); showGate();
+        }
+      } else if (m.t === 'denied') {
+        pw = null;
+        if (IS_ADMIN) { denied = true; store.del(PW_KEY); showLogin('Wrong password 😅'); }
+        else { keep.del(SCREEN_KEY); gateDone = false; updateGate('Wrong password 😅 — try again or just watch'); }
+        // the server closes the socket; onclose reconnects the screen as a viewer
+      } else if (m.t === 'act' && ACTIONS[m.a]) {
+        ACTIONS[m.a](m.p || {});
+      } else if (m.t === 'admins' && badge) {
+        badge.classList.toggle('on', m.n > 0);
+      }
+    };
+    sock.onclose = () => {
+      if (sock !== ws) return;                      // an old socket we replaced on purpose
+      role = null; setOnline(false);
+      if (denied) return;
+      if (!everConnected && ++retries > 3) return;   // static server without /ws: stay offline quietly
+      setTimeout(connect, Math.min(8000, 800 * (retries + 1)));
+    };
+  }
+  function reconnect() {
+    const old = ws; ws = null;
+    try { old && old.close(); } catch (e) {}
+    retries = 0; connect();
+  }
+
+  /* login (admin) */
+  const login = $('#login');
+  function showLogin(msg) {
+    login.hidden = false;
+    $('#login-err').textContent = msg || '';
+    setTimeout(() => $('#pw').focus(), 50);
+  }
+  function hideLogin() { login.hidden = true; }
+  $('#login form').addEventListener('submit', e => {
+    e.preventDefault();
+    pw = $('#pw').value; if (!pw) return;
+    denied = false; $('#login-err').textContent = 'Connecting…';
+    reconnect();
+  });
+
+  /* "click to start" on the main screen: unlocks sound + video autoplay,
+     and (optional) the password so this screen can control too -> two-way sync */
+  const gate = $('#gate');
+  let gateDone = false;
+  function showGate() { if (!gateDone) gate.hidden = false; }
+  function updateGate(msg) {
+    const ok = role === 'admin';
+    $('#gate-key').hidden = ok;
+    $('#gate-msg').textContent = msg || (ok
+      ? '🔓 Esta pantalla está sincronizada con /admin'
+      : 'Escribe la clave para controlar también desde esta pantalla (o déjalo vacío para solo ver)');
+    if (msg) gate.hidden = false;
+  }
+  $('#gate-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const typed = $('#gate-pw').value.trim();
+    gateDone = true; gate.hidden = true;
+    try { ctx(); } catch (err) {}
+    toggleFullscreen();
+    if (typed && role !== 'admin') { pw = typed; $('#gate-pw').value = ''; reconnect(); }
+  });
+
+  /* admin panel buttons */
+  if (IS_ADMIN) {
+    $('#remote').hidden = false;
+    $('#r-prev').addEventListener('click', prev);
+    $('#r-next').addEventListener('click', next);
+    $('#r-party').addEventListener('click', () => act('party'));
+    $('#r-close').addEventListener('click', () => { act('vclose'); act('unzoom'); });
+    $('#r-play').addEventListener('click', () => act('vtoggle'));
+    fit();
+  }
+
   /* ---------- start ---------- */
   const start = parseInt(location.hash.slice(1), 10);
   cur = 0; slides[0].classList.add('active');
   go(Number.isFinite(start) ? start - 1 : 0, true);
   if (!Number.isFinite(start) || start === 1) { updateCast(slides[0]); }
+  connect();
 })();

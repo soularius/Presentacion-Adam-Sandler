@@ -1,0 +1,8 @@
+.git
+.env
+PERSONAJES
+PROJECT.pdf
+GUION*
+*.bat
+assets/chars/yined-sandler.png
+__pycache__

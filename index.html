@@ -348,6 +348,7 @@
   <div id="golf"><div class="hole"></div><div class="flag"></div><div id="ball"></div></div>
   <div id="counter">1 / 16</div>
   <div id="hint">H = HELP</div>
+  <div id="remote-badge">📱 REMOTE ON</div>
   <div id="touchnav">
     <button id="tprev" aria-label="Previous slide">◀</button>
     <button id="tfull" aria-label="Fullscreen">⛶</button>
@@ -363,6 +364,7 @@
       <div class="frame" id="vframe"></div>
       <div class="row">
         <a class="btn red" id="vyt" target="_blank" rel="noopener">▶ OPEN ON YOUTUBE</a>
+        <button class="btn blue" id="vtoggle">⏯ PLAY / PAUSE</button>
         <button class="btn" id="vclose">✖ CLOSE (Esc)</button>
       </div>
       <p style="color:#fff;text-align:center;margin-top:12px;font-size:16px;opacity:.7">If the video doesn't play here, press “Open on YouTube”.</p>
@@ -385,6 +387,47 @@
   <canvas id="confetti" width="1600" height="900"></canvas>
 </div>
 </div>
+<!-- ===== REMOTE (solo cuando la sirve el servidor Python) ===== -->
+<!-- /admin: panel de control -->
+<div id="remote" hidden>
+  <div class="r-top">
+    <span id="r-dot" title="connection"></span>
+    <b id="r-count">1 / 16</b>
+    <span id="r-who">👭 BOTH</span>
+    <span id="r-time">⏱ 0:00</span>
+  </div>
+  <div class="r-nav">
+    <button id="r-prev" aria-label="Previous slide">◀</button>
+    <button id="r-party" aria-label="Confetti">🎉</button>
+    <button id="r-play" aria-label="Play or pause video">⏯</button>
+    <button id="r-close" aria-label="Close video or meme">✖</button>
+    <button id="r-next" aria-label="Next slide">▶</button>
+  </div>
+  <div id="r-notes"></div>
+</div>
+<!-- /admin: clave -->
+<div id="login" hidden>
+  <form autocomplete="on">
+    <img src="assets/chars/yined.png" alt=""><img src="assets/chars/majo.png" alt="">
+    <h2>Sandler Remote</h2>
+    <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required>
+    <button type="submit">ENTER ▶</button>
+    <p id="login-err"></p>
+  </form>
+</div>
+<!-- pantalla principal: un clic para activar sonido y videos -->
+<div id="gate" hidden>
+  <form id="gate-form" autocomplete="on">
+    <div class="gate-big">🎬</div>
+    <p class="gate-title">Click to start the show!</p>
+    <p class="gate-sub">Activa el sonido, los videos y la pantalla completa</p>
+    <div id="gate-key"><input id="gate-pw" type="password" placeholder="🔑 Clave (opcional)" autocomplete="current-password"></div>
+    <button type="submit" id="gate-go">▶ START</button>
+    <p id="gate-msg"></p>
+  </form>
+</div>
+<div id="toast" role="status"></div>
+
 <!-- Aviso para celular en vertical (como en PRESENTACION FLAM) -->
 <div class="rotate-overlay" aria-hidden="true">
   <div class="rotate-overlay__duo">

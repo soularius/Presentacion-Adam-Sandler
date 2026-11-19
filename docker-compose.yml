@@ -1,0 +1,9 @@
+services:
+  sandler-show:
+    build: .
+    container_name: sandler-show
+    restart: unless-stopped
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Pon ADMIN_PASSWORD en el archivo .env}
+    ports:
+      - "8000:8000"
