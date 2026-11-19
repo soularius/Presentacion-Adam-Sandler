@@ -366,6 +366,7 @@
     raf = parts.length ? requestAnimationFrame(loop) : (cx.clearRect(0, 0, 1600, 900), null);
   }
   $('#party').addEventListener('click', () => act('party'));
+  $('#restart').addEventListener('click', () => act('go', { i: 0 }));
 
   /* ---------- the action table (what can be mirrored) ---------- */
   Object.assign(ACTIONS, {
