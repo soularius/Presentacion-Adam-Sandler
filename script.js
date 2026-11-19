@@ -64,14 +64,13 @@
   const bY = $('#bubble-yined'), bM = $('#bubble-majo');
   let bubbleTimer;
   function updateCast(slide) {
-    const sp = slide.dataset.speaker || 'both';
+    const sp = slide.dataset.speaker || 'none';
     [chY, chM].forEach(c => c.classList.remove('speaking', 'quiet', 'hidden'));
     [bY, bM].forEach(b => b.classList.remove('show'));
     clearTimeout(bubbleTimer);
     if (sp === 'none' || slide.classList.contains('s-cover')) { chY.classList.add('hidden'); chM.classList.add('hidden'); return; }
     if (sp === 'yined') { chY.classList.add('speaking'); chM.classList.add('quiet'); }
     if (sp === 'majo') { chM.classList.add('speaking'); chY.classList.add('quiet'); }
-    if (sp === 'both') { chY.classList.add('speaking'); chM.classList.add('speaking'); }
     bubbleTimer = setTimeout(() => {
       if (slide.dataset.yined) { bY.textContent = slide.dataset.yined; bY.classList.add('show'); }
       if (slide.dataset.majo) { bM.textContent = slide.dataset.majo; bM.classList.add('show'); }
@@ -135,22 +134,22 @@
 
   /* ---------- speaker notes ---------- */
   const NOTES = [
-    `<b>YINED:</b> Good morning, teacher and classmates! My name is Yined…<br><b>MAJO:</b> …and my name is María José, but you can call me Majo. Today we are going to talk about a very funny person: <i>Adam Sandler!</i><br><b>YINED:</b> Get ready, because this presentation has a lot of GIFs, memes… and a little game!`,
+    `<b>MAJO:</b> Good morning, teacher and classmates! My name is María José, but you can call me Majo, and this is my partner, Yined. Today we are going to talk about a very funny person: <i>Adam Sandler!</i> Get ready, because this presentation has a lot of GIFs, memes… and a little game!`,
     `<b>YINED:</b> So, who is Adam Sandler? His full name is Adam Richard Sandler. He was born on September 9th, 1966, in Brooklyn, New York, but he grew up in Manchester, New Hampshire. His nickname is "The Sandman". He is an actor, a comedian, a writer, a producer and a musician. He is married to Jackie, and they have two daughters, Sadie and Sunny.`,
-    `<b>MAJO:</b> Why did we choose him? We have three reasons. First, he is hilarious. His movies are funny for everybody: kids, parents and grandparents.<br><b>YINED:</b> Second, he is part of our childhood. We grew up watching Hotel Transylvania and Grown Ups with our families.<br><b>MAJO:</b> And third, he is a good person. He is humble and loyal, and he always works with his friends.`,
+    `<b>MAJO:</b> Why did we choose him? We have three reasons. First, he is hilarious. His movies are funny for everybody: kids, parents and grandparents. Second, he is part of our childhood. We grew up watching Hotel Transylvania and Grown Ups with our families. And third, he is a good person. He is humble and loyal, and he always works with his friends.`,
     `<b>YINED:</b> Let's talk about his background. When he was a kid, his family moved to New Hampshire. At school, he was the class clown. When he was seventeen, his brother Scott encouraged him to try stand-up comedy in a club in Boston. In 1987 he appeared on The Cosby Show, and in 1988 he graduated from New York University.`,
     `<b>MAJO:</b> In 1990 he started working at Saturday Night Live, a very famous comedy show on TV. First he was a writer, and then he became a cast member. He created funny characters like Opera Man, and he sang "The Chanukah Song", which became a classic. But in 1995… they fired him! Can you believe it? Twenty-four years later, in 2019, he came back to host the show and he sang a song called "I Was Fired". So… I guess you could say he won!`,
     `<b>YINED:</b> After SNL, he became a movie star. He has made more than fifty movies! Some of the most iconic are Billy Madison, Happy Gilmore, The Waterboy, 50 First Dates, Click and Grown Ups. He was also the voice of Dracula in Hotel Transylvania. <i>(flip 2 or 3 posters)</i>`,
     `<b>MAJO:</b> His most iconic character is Happy Gilmore. Happy is a hockey player who can't skate very well, but he can hit a golf ball very, very far. The movie came out in 1996, and it was so popular that, in 2025, Netflix released Happy Gilmore 2! Let's see his famous swing… <i>(press SWING)</i>`,
-    `<b>YINED:</b> Adam Sandler has a lot of iconic phrases. For example, in Billy Madison: "Back to school, back to school, to prove to Dad that I'm not a fool!"<br><b>MAJO:</b> In The Waterboy: "Now that's what I call high-quality H2O!"<br><b>YINED:</b> In Happy Gilmore: "Are you too good for your home?!"<br><b>MAJO:</b> And in The Waterboy, his friend always shouts: "You can do it!" 💪 <i>(🎬 WATCH IT opens the clip — optional)</i>`,
-    `<b>YINED:</b> Now it's your turn! Let's play "Guess the movie". Look at the GIF and tell us: which movie is it? <i>(4 rounds, fast)</i><br><b>MAJO:</b> Great job, class! You are real Sandler experts!`,
+    `<b>MAJO:</b> Adam Sandler has a lot of iconic phrases. For example, in Billy Madison: "Back to school, back to school, to prove to Dad that I'm not a fool!" <i>(NEXT)</i><br>In The Waterboy: "Now that's what I call high-quality H2O!" <i>(NEXT)</i><br>In Happy Gilmore: "Are you too good for your home?!" <i>(NEXT)</i><br>And in The Waterboy, his friend always shouts: "You can do it!" 💪 <i>(🎬 WATCH IT opens the clip — optional)</i>`,
+    `<b>YINED:</b> Now it's your turn! Let's play "Guess the movie". Look at the GIF and tell us: which movie is it? <i>(4 rounds, fast — Majo clicks the answers)</i><br><i>(after FINAL RESULT)</i> Great job, class! You are real Sandler experts!`,
     `<b>YINED:</b> Adam Sandler is also famous for his style. Other celebrities wear suits and elegant dresses on the red carpet, but Adam usually wears an oversized hoodie, basketball shorts and sneakers. He doesn't care! People on the internet love it. <i>(click the 4 boxes)</i>`,
     `<b>YINED:</b> And this is our favorite story! At the Oscars in 2025, everybody wore tuxedos and elegant dresses… but Adam wore a blue hoodie and basketball shorts! The host, Conan O'Brien, made fun of him: "You're dressed like a guy playing video poker at 2 a.m., Adam!" And Adam answered: "Nobody even thought about what I was wearing until you brought it up! I like the way I look, because I'm a good person!"… and he walked out of the theater! Don't worry: it was a comedy bit, and everybody laughed. <i>(optional: click the photo for the video)</i>`,
     `<b>MAJO:</b> Of course, the internet loves him, so there are millions of memes. This one is us after learning the present perfect… <i>(zoom)</i> and this one is us at the end of this presentation! <i>(zoom the last one)</i>`,
     `<b>MAJO:</b> But Adam isn't only a comedian. He is also a great dramatic actor. In Uncut Gems, he was more serious than ever, and he won an Independent Spirit Award for Best Male Lead. In 2023, he received the Mark Twain Prize, one of the most important comedy awards in the United States. And according to Forbes, he was the highest-paid actor of 2025!`,
     `<b>YINED:</b> His secret is friendship and family. His company is called Happy Madison: Happy Gilmore plus Billy Madison. He has worked with the same friends for more than thirty years, like Rob Schneider, David Spade, Kevin James and Chris Rock. His wife and daughters appear in many of his movies, too.`,
-    `<b>MAJO:</b> Why does he inspire us? Lesson number one: never give up. They fired him, but he became one of the biggest stars in the world.<br><b>YINED:</b> Lesson two: be loyal to your friends.<br><b>MAJO:</b> Lesson three: be yourself… even in basketball shorts at the Oscars!<br><b>YINED:</b> And lesson four: make people happy. That's what he does every day.`,
-    `<b>BOTH:</b> Thank you so much for listening!<br><b>MAJO:</b> Does anyone have any questions? 🙋<br><i>(press C for more confetti)</i>`,
+    `<b>MAJO:</b> Why does he inspire us? Lesson number one: never give up. They fired him, but he became one of the biggest stars in the world. Lesson two: be loyal to your friends. Lesson three: be yourself… even in basketball shorts at the Oscars! And lesson four: make people happy. That's what he does every day.`,
+    `<b>YINED:</b> Thank you so much for listening! Does anyone have any questions? 🙋<br><i>(Majo presses C for more confetti)</i>`,
   ];
   const notesEl = $('#notes');
   function renderNotes() { notesEl.innerHTML = `<h4>SCRIPT · SLIDE ${cur + 1}</h4><p>${NOTES[cur] || ''}</p>`; }
