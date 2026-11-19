@@ -414,9 +414,12 @@
   $('#help').addEventListener('click', () => $('#help').classList.remove('on'));
 
   /* ---------- touch buttons (phone / tablet) ---------- */
+  const fsSupported = !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
+  const isFullscreen = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+  function enterFullscreen() { if (!isFullscreen()) toggleFullscreen(); }   // never exits
   function toggleFullscreen() {
     const el = document.documentElement;
-    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (!isFullscreen()) {
       const req = el.requestFullscreen || el.webkitRequestFullscreen;
       const p = req ? req.call(el) : null;
       // en Android, con pantalla completa se puede fijar horizontal
@@ -541,9 +544,15 @@
     const typed = $('#gate-pw').value.trim();
     gateDone = true; gate.hidden = true;
     try { ctx(); } catch (err) {}
-    toggleFullscreen();
+    enterFullscreen();
     if (typed && role !== 'admin') { pw = typed; $('#gate-pw').value = ''; reconnect(); }
   });
+  const gateFull = $('#gate-full');
+  gateFull.addEventListener('click', () => { try { ctx(); } catch (err) {} toggleFullscreen(); });
+  if (!fsSupported) gateFull.style.display = 'none';
+  const fsLabel = () => { gateFull.textContent = isFullscreen() ? '🡼 EXIT FULL SCREEN' : '⛶ FULL SCREEN'; };
+  document.addEventListener('fullscreenchange', fsLabel);
+  document.addEventListener('webkitfullscreenchange', fsLabel);
 
   /* admin panel buttons */
   if (IS_ADMIN) {
