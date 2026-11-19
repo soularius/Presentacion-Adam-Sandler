@@ -2,45 +2,37 @@
 ### The Sandler Show · Celebrity Speaking
 
 > Solo tus partes, en orden. **↪ Entras después de:** es lo último que dice Majo antes de tu turno.
+> En cada diapositiva habla **solo una**: tú tienes 8 (2, 4, 6, 9, 10, 11, 14, 16), todas completas, sin repartir frases con Majo.
 > 🖱️ = lo que haces en la pantalla. Cuando termines tu diapositiva, presiona `→`.
 > Las palabras en **negrita** son las de pronunciación difícil (ver tabla en GUION.md).
 
 ---
 
-## 1 · PORTADA (las dos)
+## 1 · PORTADA (habla Majo)
 
-**Empiezas tú:**
-> Good morning, teacher and classmates! My name is Yined…
-
-↪ *Entras después de que Majo dice:* "…Today we are going to talk about a very funny person: Adam Sandler!"
-> Get ready, because this presentation has a lot of GIFs, memes… and a little game!
+No hablas. Cuando Majo diga *"…and this is my partner, Yined"*, **saluda con la mano** 👋 y sonríe.
 
 ---
 
-## 2 · WHO IS HE? (sola)
+## 2 · WHO IS HE?
 
+↪ *Entras después de que Majo dice:* "…Get ready, because this presentation has a lot of GIFs, memes… and a little game!" *(y pasa a la diapositiva 2)*
 > So, who is Adam Sandler? His full name is Adam Richard Sandler. He **was born** on September 9th, 1966, in **Brooklyn**, New York, but he **grew up** in Manchester, New **Hampshire**. His nickname is "The **Sandman**". He is an actor, a **comedian**, a writer, a producer and a **musician**. He is married to Jackie, and they have two **daughters**, Sadie and Sunny.
 
-🖱️ Al terminar → `→`
+🖱️ Al terminar → `→` (le toca a Majo)
 
 ---
 
-## 3 · WHY DID WE CHOOSE HIM? (Majo + tú)
+## 4 · BACKGROUND
 
-↪ *Entras después de que Majo dice:* "…His movies are funny for everybody: kids, parents and grandparents."
-> Second, he is part of our **childhood**. We grew up watching Hotel **Transylvania** and Grown Ups with our families.
-
----
-
-## 4 · BACKGROUND (sola)
-
+↪ *Entras después de que Majo dice:* "…He is humble and loyal, and he always works with his friends."
 > Let's talk about his **background**. When he was a kid, his family **moved** to New Hampshire. At school, he was the class clown. When he was seventeen, his brother Scott **encouraged** him to try stand-up comedy in a club in Boston. In 1987 he **appeared** on The Cosby Show, and in 1988 he **graduated** from New York **University**.
 
 🖱️ Al terminar → `→`
 
 ---
 
-## 6 · ICONIC MOVIES (sola)
+## 6 · ICONIC MOVIES
 
 ↪ *Entras después de que Majo dice:* "…So… I guess you could say he won!"
 > After SNL, he became a movie star. He **has made** more than fifty movies! Some of the most **iconic** are Billy Madison, Happy Gilmore, The Waterboy, 50 First Dates, Click and Grown Ups. He was also the voice of **Dracula** in Hotel Transylvania.
@@ -49,21 +41,13 @@
 
 ---
 
-## 8 · ICONIC PHRASES (las dos · ¡con voz de personaje!)
+## 8 · ICONIC PHRASES (habla Majo)
 
-↪ *Entras después de que Majo dice:* "…Let's see his famous swing…" *(y el HOLE IN ONE)*
-> Adam Sandler has a lot of iconic **phrases**. For example, in Billy Madison: *"Back to school, back to school, to prove to Dad that I'm not a fool!"*
-
-🖱️ Clic **NEXT QUOTE ▶**
-
-↪ *Entras después de que Majo dice:* "…Now that's what I call high-quality H2O!"
-> In Happy Gilmore: *"Are you too good for your home?!"* 😤
-
-🖱️ Clic **NEXT QUOTE ▶** (le toca a Majo)
+No hablas. Majo dice las 4 frases con voz de personaje. Tú puedes reírte y animar a la clase 😂
 
 ---
 
-## 9 · QUIZ: GUESS THE MOVIE (tú presentas, Majo hace clic)
+## 9 · QUIZ: GUESS THE MOVIE (tú hablas, Majo hace clic)
 
 ↪ *Entras después de que Majo grita:* "…You can do it!"
 > Now it's your turn! Let's play "Guess the movie". Look at the GIF and tell us: **which** movie is it?
@@ -76,18 +60,22 @@ Mientras la clase responde, usa estas frases:
 
 Respuestas: **1** Happy Gilmore · **2** Hotel Transylvania · **3** Billy Madison · **4** Hustle
 
+Después de **FINAL RESULT 🏆**:
+> Great job, class! You are real Sandler experts!
+
+🖱️ → `→`
+
 ---
 
-## 10 · THE SANDLER STYLE (sola)
+## 10 · THE SANDLER STYLE
 
-↪ *Entras después de que Majo dice:* "…Great job, class! You are real Sandler experts!"
 > Adam Sandler is also famous for his style. Other celebrities wear suits and **elegant** dresses on the red carpet, but Adam usually wears an **oversized hoodie**, basketball shorts and **sneakers**. He doesn't care! People on the internet love it.
 
 🖱️ Mientras hablas, marca las 4 casillas → "100% SANDLERIZED!" 🎉. Luego `→`
 
 ---
 
-## 11 · THE OSCARS MOMENT (sola · ¡actuando!)
+## 11 · THE OSCARS MOMENT (¡actuando!)
 
 > And this is our favorite story! At the **Oscars** in 2025, everybody wore **tuxedos** and elegant dresses… but Adam wore a blue hoodie and basketball shorts! The host, **Conan O'Brien**, made fun of him:
 >
@@ -103,37 +91,21 @@ Respuestas: **1** Happy Gilmore · **2** Hotel Transylvania · **3** Billy Madis
 
 ---
 
-## 14 · FRIENDS & FAMILY (sola)
+## 14 · FRIENDS & FAMILY
 
 ↪ *Entras después de que Majo dice:* "…he was the highest-paid actor of 2025!"
 > His secret is **friendship** and family. His company is called Happy Madison: Happy Gilmore plus Billy Madison. He **has worked** with the same friends for more than thirty years, like Rob Schneider, David Spade, Kevin James and Chris Rock. His wife and daughters appear in many of his movies, too.
 
-🖱️ Al terminar → `→`
+🖱️ Al terminar → `→` (le toca a Majo)
 
 ---
 
-## 15 · WHY HE INSPIRES US (las dos)
+## 16 · THANK YOU!
 
-↪ *Entras después de que Majo dice:* "…They fired him, but he became one of the biggest stars in the world."
+↪ *Entras después de que Majo dice:* "…And lesson four: make people happy. That's what he does every day." *(y pasa a la diapositiva 16)*
+> Thank you so much for listening! Does anyone have any questions? 🙋
 
-🖱️ Voltea la tarjeta **2**
-> Lesson two: be **loyal** to your friends.
-
-↪ *Entras después de que Majo dice:* "…be yourself… even in basketball shorts at the Oscars!"
-
-🖱️ Voltea la tarjeta **4**
-> And lesson four: make people happy. That's what he does every day.
-
-🖱️ → `→`
-
----
-
-## 16 · THANK YOU! (las dos)
-
-> **(las dos a la vez)** Thank you so much for listening!
-
-↪ *Después de que Majo pregunta:* "Does anyone have any questions?"
-🖱️ Presiona `C` o el botón **🎉 CONFETTI**
+🖱️ Majo lanza el confeti 🎉
 
 ---
 

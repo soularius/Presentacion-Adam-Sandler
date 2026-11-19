@@ -2,7 +2,7 @@
 ### Celebrity Speaking · Yined & Majo · Teacher Juan S. Guerrero · Jueves 19
 
 > **Meta:** 6 min mínimo (somos pareja). Este guion dura **~7:00–7:20** a ritmo tranquilo. Si van largas, salten los videos (son opcionales) y hagan solo 2 rondas del quiz.
-> **Reparto:** Yined presenta 7 diapositivas sola (2, 4, 6, 9, 10, 11, 14), Majo 5 (3, 5, 7, 12, 13), y 4 las hacen juntas (1, 8, 15, 16).
+> **Reparto:** en cada diapositiva habla **solo una**. Yined presenta 8 (2, 4, 6, 9, 10, 11, 14, 16) y Majo 8 (1, 3, 5, 7, 8, 12, 13, 15). Nunca hablan las dos a la vez ni se reparten frases dentro de la misma diapositiva.
 > En la presentación, la chibi de quien habla **se agranda y lleva el micrófono 🎤**, así nunca se pierden.
 
 ---
@@ -37,13 +37,11 @@ El cronómetro arranca solo cuando pasan a la diapositiva 2.
 
 ---
 
-### 1️⃣ PORTADA · ⏱ 0:00 – 0:25 · 👭 LAS DOS
+### 1️⃣ PORTADA · ⏱ 0:00 – 0:25 · 🎤 MAJO
 
-**YINED:** Good morning, teacher and classmates! My name is Yined…
+**MAJO:** Good morning, teacher and classmates! My name is María José, but you can call me Majo, and this is my partner, Yined. Today we are going to talk about a very funny person: **Adam Sandler**! Get ready, because this presentation has a lot of GIFs, memes… and a little game!
 
-**MAJO:** …and my name is María José, but you can call me Majo. Today we are going to talk about a very funny person: **Adam Sandler**!
-
-**YINED:** Get ready, because this presentation has a lot of GIFs, memes… and a little game!
+*(Yined saluda con la mano cuando Majo la presenta 👋)*
 
 *(Majo presiona `→`)*
 
@@ -57,13 +55,9 @@ El cronómetro arranca solo cuando pasan a la diapositiva 2.
 
 ---
 
-### 3️⃣ WHY DID WE CHOOSE HIM? · ⏱ 0:55 – 1:25 · 🎤 MAJO (+ Yined)
+### 3️⃣ WHY DID WE CHOOSE HIM? · ⏱ 0:55 – 1:25 · 🎤 MAJO
 
-**MAJO:** Why did we choose him? We have three reasons. First, he is **hilarious**. His movies are funny for everybody: kids, parents and grandparents.
-
-**YINED:** Second, he is part of our **childhood**. We grew up watching Hotel **Transylvania** and Grown Ups with our families.
-
-**MAJO:** And third, he is a good person. He is **humble** and **loyal**, and he always works with his friends.
+**MAJO:** Why did we choose him? We have three reasons. First, he is **hilarious**. His movies are funny for everybody: kids, parents and grandparents. Second, he is part of our **childhood**. We grew up watching Hotel **Transylvania** and Grown Ups with our families. And third, he is a good person. He is **humble** and **loyal**, and he always works with his friends.
 
 ---
 
@@ -97,11 +91,11 @@ El cronómetro arranca solo cuando pasan a la diapositiva 2.
 
 ---
 
-### 8️⃣ ICONIC PHRASES · ⏱ 3:35 – 4:05 · 👭 LAS DOS (¡actuando!)
+### 8️⃣ ICONIC PHRASES · ⏱ 3:35 – 4:05 · 🎤 MAJO (¡actuando!)
 
-> 🎭 Aquí lean las frases **con voz de personaje**. Es el momento para que la clase se ría.
+> 🎭 Aquí Majo dice las frases **con voz de personaje**. Es el momento para que la clase se ría.
 
-**YINED:** Adam Sandler has a lot of iconic **phrases**. For example, in Billy Madison: *"Back to school, back to school, to prove to Dad that I'm not a fool!"*
+**MAJO:** Adam Sandler has a lot of iconic **phrases**. For example, in Billy Madison: *"Back to school, back to school, to prove to Dad that I'm not a fool!"*
 
 *(clic NEXT QUOTE ▶)*
 
@@ -109,7 +103,7 @@ El cronómetro arranca solo cuando pasan a la diapositiva 2.
 
 *(clic NEXT QUOTE ▶)*
 
-**YINED:** In Happy Gilmore: *"Are you too good for your home?!"*
+**MAJO:** In Happy Gilmore: *"Are you too good for your home?!"*
 
 *(clic NEXT QUOTE ▶)*
 
@@ -135,7 +129,7 @@ El cronómetro arranca solo cuando pasan a la diapositiva 2.
 
 Frases útiles mientras juegan: *"Are you sure?"* · *"Yes! That's right!"* · *"Nope, try again!"* · *"Last round!"*
 
-**MAJO:** *(después de FINAL RESULT 🏆)* Great job, class! You are real Sandler experts!
+**YINED:** *(después de FINAL RESULT 🏆)* Great job, class! You are real Sandler experts!
 
 > ⏱ Si van atrasadas, hagan solo 2 rondas y pasen con `→`.
 
@@ -184,27 +178,19 @@ Frases útiles mientras juegan: *"Are you sure?"* · *"Yes! That's right!"* · *
 
 ---
 
-### 1️⃣5️⃣ WHY HE INSPIRES US · ⏱ 6:40 – 7:05 · 👭 LAS DOS
+### 1️⃣5️⃣ WHY HE INSPIRES US · ⏱ 6:40 – 7:05 · 🎤 MAJO
 
-*(Cada una voltea su tarjeta con clic antes de decir su lección)*
+*(Majo voltea cada tarjeta con clic antes de decir esa lección)*
 
-**MAJO:** Why does he **inspire** us? Lesson number one: never give up. They fired him, but he became one of the biggest stars in the world.
-
-**YINED:** Lesson two: be **loyal** to your friends.
-
-**MAJO:** Lesson three: be yourself… even in basketball shorts at the Oscars!
-
-**YINED:** And lesson four: make people happy. That's what he does every day.
+**MAJO:** Why does he **inspire** us? Lesson number one: never give up. They fired him, but he became one of the biggest stars in the world. Lesson two: be **loyal** to your friends. Lesson three: be yourself… even in basketball shorts at the Oscars! And lesson four: make people happy. That's what he does every day.
 
 ---
 
-### 1️⃣6️⃣ THANK YOU! · ⏱ 7:05 – 7:20 · 👭 LAS DOS
+### 1️⃣6️⃣ THANK YOU! · ⏱ 7:05 – 7:20 · 🎤 YINED
 
-**LAS DOS (a la vez):** Thank you so much for listening!
+**YINED:** Thank you so much for listening! Does anyone have any questions? 🙋
 
-**MAJO:** Does anyone have any questions? 🙋
-
-*(Yined presiona `C` o el botón 🎉 CONFETTI)*
+*(Majo presiona `C` o el botón 🎉 CONFETTI)*
 
 ---
 
