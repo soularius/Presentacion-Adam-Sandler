@@ -193,7 +193,9 @@
     notesEl.innerHTML = `<h4>SCRIPT · SLIDE ${cur + 1}</h4><p>${NOTES[cur] || ''}</p>`;
     if (IS_ADMIN) {
       $('#r-count').textContent = `${cur + 1} / ${N}`;
-      $('#r-who').textContent = WHO[slides[cur].dataset.speaker || 'both'];
+      // who speaks = the name in this slide's script (works for every slide, including the last one)
+      const first = ((NOTES[cur] || '').match(/<b>([A-ZÁÉÍÓÚ]+):<\/b>/) || [])[1];
+      $('#r-who').textContent = first ? '🎤 ' + first : WHO[slides[cur].dataset.speaker || 'both'];
       $('#r-notes').innerHTML = NOTES[cur] || '';
       $('#r-notes').scrollTop = 0;
     }
